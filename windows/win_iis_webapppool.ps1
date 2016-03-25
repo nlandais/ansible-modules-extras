@@ -95,7 +95,11 @@ try {
       $result.changed = $TRUE
     }
     if ($state -eq 'restarted') {
-      Restart-WebAppPool -Name $name
+      switch ($pool.State)
+        { 
+          'Stopped' { Start-WebAppPool -Name $name -ErrorAction Stop }
+          default { Restart-WebAppPool -Name $name -ErrorAction Stop }
+        }
       $result.changed = $TRUE   
     }
   }
